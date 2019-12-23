@@ -71,6 +71,7 @@ Notes:
     then the vdom will not be updated
 - you need to add the subscription transitionSub in your app
 
-See example here:
+
+See a full example here:
 https://github.com/gbagan/hyperapp-transition-group/blob/master/examples/example2.js
 
