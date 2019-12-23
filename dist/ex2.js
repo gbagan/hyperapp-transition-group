@@ -377,10 +377,10 @@
     });
 
     return ({
-      tag,
+      tag = "div",
       props,
       items,
-      getKey
+      getKey = x => x
     }, viewItem) => // dummy object to force the evaluation of the lazy view at each update
     Lazy({
       items: items,
@@ -389,7 +389,6 @@
         items
       }) => {
         if (Array.isArray(viewItem)) viewItem = viewItem[0].name;
-        console.log(viewItem);
         let atLeastOneNew = false;
         const itemKeys = {};
         items.forEach((item, i) => {
