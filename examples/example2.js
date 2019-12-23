@@ -7,7 +7,7 @@ import {makeTransitionGroup, transitionSub} from "../src/index"
 
 // you need to make one instance of makeTransitionGroup per use
 // otherwise all transitionGroup will share the same state
-const transitionGroup = makeTransitionGroup()
+const TransitionGroup = makeTransitionGroup()
 
 const addItem = ({ i, items }) => ({ i: i + 1, items: [i].concat(items) })
 const removeItem = ({ i, items }) => ({ i, items: items.filter((item, j) => j !== (items.length / 2 | 0)) })
@@ -17,28 +17,29 @@ const removeTwoItems = ({ i, items }) => ({ i, items: items.filter((item, j) => 
 const clear = ({ i, items }) => ({ i, items: [] })
 
 const view = state =>
-    h("main", {}, [
-        transitionGroup({
-            tag: "div",
-            props: {class: "ex3-container"},
-            items: state.items,
-            getKey: x => x
-        }, (index, value, status) =>
+    <main>
+        <TransitionGroup
+            tag="div"
+            props={{class: "ex3-container"}}
+            items={state.items}
+            getKey={x => x}
+        >{(index, value, status) =>
             h("div", { style: { left: (index * 50) + "px" }, class: "ex3-item ex3-item-" + status }, value)
-        ),
-        h("div", {}, [
-            h("button", { onclick: addItem }, "Add an item"),
-            h("button", { onclick: removeItem }, "Remove an item"),
-            h("button", { onclick: replaceItem }, "Replace an item"),
-            h("button", { onclick: shuffle }, "Shuffle"),
-            h("button", { onclick: removeTwoItems }, "Remove two items"),
-            h("button", { onclick: clear }, "Clear"),
-        ])
-    ])
+        }
+        </TransitionGroup>
+        <div>
+            <button onclick={addItem}>Add an item</button>
+            <button onclick={removeItem}>Remove an item</button>
+            <button onclick={replaceItem}>Replace an item</button>
+            <button onclick={shuffle}>Shuffle</button>
+            <button onclick={removeTwoItems}>Remove two items</button>
+            <button onclick={clear}>Clear</button>
+        </div>
+    </main>
 
-app({
+window.onload = () => app({
     init: { i: 0, items: [] },
     view,
     node: document.getElementById("app"),
-    subscriptions: () => [transitionSub] // shallow copy to force the render
+    subscriptions: () => [transitionSub]
 })

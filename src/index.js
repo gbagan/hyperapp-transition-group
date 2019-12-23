@@ -31,10 +31,13 @@ export const makeTransitionGroup = () => {
 
     const patchView = key => vdom => ({ ...vdom, key, props: { ...itemProps(key), ...vdom.props } })
 
-    return ({ tag, props, items, getKey }, viewItem =>
+    return ({ tag, props, items, getKey }, viewItem) =>
         // dummy object to force the evaluation of the lazy view at each update
         Lazy({
             items: items, dummy: {}, view: ({ items }) => {
+                if(Array.isArray(viewItem))
+                    viewItem = viewItem[0].name
+                    
                 let atLeastOneNew = false
                 const itemKeys = {}
                 items.forEach((item, i) => {
@@ -67,5 +70,4 @@ export const makeTransitionGroup = () => {
                 return h(tag, props, entries.map(([key, { item, index, status }]) => patchView(key)(viewItem(index, item, status))))
             }
         })
-    )
 }

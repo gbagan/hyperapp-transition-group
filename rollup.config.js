@@ -1,5 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
- 
+import babel from 'rollup-plugin-babel';
+
 export default {
   input: 'example/main.js',
   output: {
@@ -8,6 +9,7 @@ export default {
     name: 'MyModule'
   },
   plugins: [
-    resolve()
+    resolve(),
+    babel()
   ]
 };

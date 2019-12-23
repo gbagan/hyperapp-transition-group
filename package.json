@@ -3,7 +3,11 @@
     "hyperapp": "^2.0.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-react-jsx": "^7.7.7",
+    "babel-plugin-transform-jsx": "^2.0.0",
     "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0"
   },
   "scripts": {
