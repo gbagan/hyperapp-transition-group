@@ -72,6 +72,9 @@ Notes:
 - you need to add the subscription transitionSub in your app
 
 
-See a full example here:
+See a full example here
 https://github.com/gbagan/hyperapp-transition-group/blob/master/examples/example2.js
+
+[Demo](https://gbagan.github.io/hyperapp-transition-group/ex2.html)
+
 
