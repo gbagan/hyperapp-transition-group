@@ -24,7 +24,7 @@ const view = state =>
             items={state.items}
             getKey={x => x}
         >{(index, value, status) =>
-            h("div", { style: { left: (index * 50) + "px" }, class: "ex3-item ex3-item-" + status }, value)
+            <div style={{left: (index * 50) + "px"}} class={`ex3-item ex3-item-${status}`}>value</div>
         }
         </TransitionGroup>
         <div>
