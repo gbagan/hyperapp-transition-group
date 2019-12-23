@@ -26,6 +26,45 @@ the child of TransitionGroup is a function viewItem :: (index, item, status) => 
 - item: the element
 - status: the status is a string that can be "entering" | "entered" | "leaving"
 
+Example:
+
+```jsx
+// assume your state
+const state {
+    rects: [{ id: 1, x: 100, y: 300}, {id: 2, x: 160, y: 20}],
+    ...
+ }
+
+// then in your view, you can use TransitionGroup as follows
+<TransitionGroup
+    tag="svg"
+    props={{class: "rects-container"}}
+    items={state.rects}
+    getKey={x => x.id}
+>{(index, {x, y}, status) =>
+     <rect x={x} y={y} class={`rects-item rects-item-${status}`}/>
+}
+</TransitionGroup>
+```
+
+In your css, you must define classes rects-item-entering, rects-item-entered, rects-item-leaving
+```css
+.rects-item-entering {
+     opacity: 0;
+}
+
+.rects-item-entered {
+    opacity: 1;
+    transition: all linear 500ms
+}
+
+.rects-item-leaving {
+    opacity: 0;
+    transition: all linear 500ms
+}
+```
+
+
 Notes:
 - the vnode returned by the functionItem must not be keyed. TransitionGroup does that for you
 - if the transition-group is in a subtree which is skipped during the render (e.g. because it is inside a lazy view),
