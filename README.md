@@ -19,10 +19,10 @@ properties of TransitionGroup
 - props: the properties of the container view
 - items: an array from the state that we want to display
 - getKey: (default x => x)
-          a function which return a number or a string which identifies an element of items
+          a function which returns a number or a string which identifies an element of items
           At any time, all elements of items must have a distinct key
 - sortBy: "key" | "list" (default  "key")
-          Determine in what order appear the elements of items in the function viewItem
+          Determine in what order appear the elements of the array items in the function viewItem
           If you want that respects the order of items, then use "list" but you can have glitch on transitions.
           Otherwise, use "key"
 
