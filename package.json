@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "hyperapp": "^2.0.3"
+  },
+  "devDependencies": {
+    "rollup": "^1.27.14",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "scripts": {
+    "build-example": "rollup -i ${dir}examples/example2.js -o ${dir}dist/ex2.js -c rollup.config.js"
+  }
+}
