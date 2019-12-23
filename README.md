@@ -15,12 +15,12 @@ const TransitionGroup2 = makeTransitionGroup()
 
 
 properties of TransitionGroup
-- tag: the tag name of the container view (default "div")
+- tag: (default "div") the tag name of the container view
 - props: the properties of the container view
 - items: an array from the state that we want to display
-- getKey: a function which return a number or a string which identifies an element of items
+- getKey: (default x => x)
+          a function which return a number or a string which identifies an element of items
           At any time, all elements of items must have a distinct key
-          (default: x => x)
 - sortBy: "key" | "list" (default  "key")
           Determine in what order appear the elements of items in the function viewItem
           If you want that respects the order of items, then use "list" but you can have glitch on transitions.
