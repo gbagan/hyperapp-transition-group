@@ -10,7 +10,8 @@ const rawEvent = name =>
 
 
 export const transitionSub = rawEvent("needupdate")(state => ({ ...state }))
-const compareKey = (key1, key2) => key1 < key2 ? -1 : key1 === key2 ? 0 : 1
+const compareKey = ([key1], [key2]) => key1 < key2 ? -1 : key1 === key2 ? 0 : 1
+const compareIndex = ([k1,v1], [k2,v2]) => v1.index - v2.index
 
 export const makeTransitionGroup = () => {
     const obj = {};
@@ -31,7 +32,7 @@ export const makeTransitionGroup = () => {
 
     const patchView = key => vdom => ({ ...vdom, key, props: { ...itemProps(key), ...vdom.props } })
 
-    return ({ tag="div", props, items, getKey=(x => x) }, viewItem) =>
+    return ({ tag="div", props, items, getKey=(x => x), sortBy="key" }, viewItem) =>
         // dummy object to force the evaluation of the lazy view at each update
         Lazy({
             items: items, dummy: {}, view: ({ items }) => {
@@ -65,9 +66,9 @@ export const makeTransitionGroup = () => {
                 }
 
                 const entries = Object.entries(obj)
-                entries.sort(([key1], [key2]) => compareKey(key1, key2))
+                entries.sort(sortBy === "index" ? compareIndex : compareKey)
 
-                return h(tag, props, entries.map(([key, { item, index, status }]) => patchView(key)(viewItem(index, item, status))))
+                return h(tag, props, entries.map(([key, {item, index, status}]) => patchView(key)(viewItem(index, item, status))))
             }
         })
 }

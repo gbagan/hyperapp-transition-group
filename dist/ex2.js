@@ -348,7 +348,9 @@
   const transitionSub = rawEvent("needupdate")(state => ({ ...state
   }));
 
-  const compareKey = (key1, key2) => key1 < key2 ? -1 : key1 === key2 ? 0 : 1;
+  const compareKey = ([key1], [key2]) => key1 < key2 ? -1 : key1 === key2 ? 0 : 1;
+
+  const compareIndex = ([k1, v1], [k2, v2]) => v1.index - v2.index;
 
   const makeTransitionGroup = () => {
     const obj = {};
@@ -380,7 +382,8 @@
       tag = "div",
       props,
       items,
-      getKey = x => x
+      getKey = x => x,
+      sortBy = "key"
     }, viewItem) => // dummy object to force the evaluation of the lazy view at each update
     Lazy({
       items: items,
@@ -421,7 +424,7 @@
         }
 
         const entries = Object.entries(obj);
-        entries.sort(([key1], [key2]) => compareKey(key1, key2));
+        entries.sort(sortBy === "index" ? compareIndex : compareKey);
         return h(tag, props, entries.map(([key, {
           item,
           index,
@@ -479,8 +482,7 @@
   });
 
   const clear = ({
-    i,
-    items
+    i
   }) => ({
     i,
     items: []
@@ -498,7 +500,7 @@
       left: index * 50 + "px"
     },
     class: `ex3-item ex3-item-${status}`
-  }, "value")), h("div", null, h("button", {
+  }, value)), h("div", null, h("button", {
     onclick: addItem
   }, "Add an item"), h("button", {
     onclick: removeItem

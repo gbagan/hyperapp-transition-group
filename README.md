@@ -20,7 +20,12 @@ properties of TransitionGroup
 - items: an array from the state that we want to display
 - getKey: a function which return a number or a string which identifies an element of items
           At any time, all elements of items must have a distinct key
-          
+          (default: x => x)
+- sortBy: "key" | "list" (default  "key")
+          Determine in what order appear the elements of items in the function viewItem
+          If you want that respects the order of items, then use "list" but you can have glitch on transitions.
+          Otherwise, use "key"
+
 the child of TransitionGroup is a function viewItem :: (index, item, status) => vdom which render an element of items
 - index: the index of the item in the array
 - item: the element

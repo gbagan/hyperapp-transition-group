@@ -14,7 +14,7 @@ const removeItem = ({ i, items }) => ({ i, items: items.filter((item, j) => j !=
 const replaceItem = ({ i, items }) => ({ i: i + 1, items: items.map((item, j) => j === (items.length / 2 | 0) ? i : item) })
 const shuffle = ({ i, items }) => ({ i, items: items.map((v, i) => items[(1 + i * 347) % items.length]) })
 const removeTwoItems = ({ i, items }) => ({ i, items: items.filter((item, j) => j !== 1 && j !== 4) })
-const clear = ({ i, items }) => ({ i, items: [] })
+const clear = ({i}) => ({ i, items: [] })
 
 const view = state =>
     <main>
@@ -24,7 +24,7 @@ const view = state =>
             items={state.items}
             getKey={x => x}
         >{(index, value, status) =>
-            <div style={{left: (index * 50) + "px"}} class={`ex3-item ex3-item-${status}`}>value</div>
+            <div style={{left: (index * 50) + "px"}} class={`ex3-item ex3-item-${status}`}>{value}</div>
         }
         </TransitionGroup>
         <div>
