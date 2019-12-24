@@ -352,6 +352,28 @@
 
   const compareIndex = ([k1, v1], [k2, v2]) => v1.index - v2.index;
 
+  const addTransitionClasses = (vdom, classNames, status) => {
+    if (!vdom) return;
+    let vdomCls = vdom.props.class;
+    vdomCls = vdomCls === undefined ? {} : typeof vdomCls === "string" ? {
+      [vdomCls]: true
+    } : vdomCls;
+    const trCls = status === "entering" ? `${classNames} ${classNames}-entering` : status === "entered" ? `${classNames} ${classNames}-entered` : `${classNames} ${classNames}-leaving`;
+    const newCls = { ...vdomCls,
+      [trCls]: true
+    };
+    console.log({ ...vdom,
+      props: { ...vdom.props,
+        class: newCls
+      }
+    });
+    return { ...vdom,
+      props: { ...vdom.props,
+        class: newCls
+      }
+    };
+  };
+
   const makeTransitionGroup = () => {
     const obj = {};
 
@@ -383,7 +405,8 @@
       props,
       items,
       getKey = x => x,
-      sortBy = "key"
+      sortBy = "key",
+      classNames
     }, viewItem) => // dummy object to force the evaluation of the lazy view at each update
     Lazy({
       items: items,
@@ -429,7 +452,11 @@
           item,
           index,
           status
-        }]) => patchView(key)(viewItem(index, item, status))));
+        }]) => {
+          const vdom = viewItem(item, index, status);
+          const vdom2 = patchView(key)(vdom);
+          return classNames ? addTransitionClasses(vdom2, classNames, status) : vdom2;
+        }));
       }
     });
   };
@@ -494,12 +521,11 @@
       class: "ex3-container"
     },
     items: state.items,
-    getKey: x => x
-  }, (index, value, status) => h("div", {
+    classNames: "ex3-item"
+  }, (value, index) => h("div", {
     style: {
       left: index * 50 + "px"
-    },
-    class: `ex3-item ex3-item-${status}`
+    }
   }, value)), h("div", null, h("button", {
     onclick: addItem
   }, "Add an item"), h("button", {

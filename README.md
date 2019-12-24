@@ -25,15 +25,15 @@ properties of TransitionGroup
 - **getKey**: (default x => x)
           A function which returns a number or a string which identifies an element of the array *items*.  
           At any time, all elements of items must have a distinct key
-- **sortBy**: "key" | "list" (default  "key")
+- **sortBy**: "key" | "index" (default  "key")
           Determines in what order appear the elements of the array items in the function viewItem.
-          If you want that respects the order of the array *items*, then use "list".
+          If you want that respects the order of the array *items*, then use "index".
           It is nice if you only insert or add elements but you can have glitches on transitions if you permute elements.
           If you don't care about order, use "key".
 
-the child of TransitionGroup is a function viewItem :: (index, item, status) => vdom which renders an element of the array *items*
-- **index**: the index of the item in the array
-- **item**: the element
+the child of TransitionGroup is a function viewItem :: (item, index, status) => vdom which renders an element of the array *items*
+- **item**: the element of *items* that will be render
+- **index**: the index of the element in the array
 - **status**: the status is a string that can be "entering" | "entered" | "leaving".
             If classNames is defined, you probably don't need this information              
 
@@ -91,7 +91,7 @@ the child of TransitionGroup is a function viewItem :: (data), status) => vdom
 - **status**: the status is a string that can be "entering" | "entered" | "leaving".
             If classNames is defined, you probably don't need this information  
 
-**makeFadeTransition** creates an instance of FadeTransition
+**makeFadeTransition** creates an instance of FadeTransition **(Not implemented yet)**
 
 FadeTransition is a special instance of Transition
 

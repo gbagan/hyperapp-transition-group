@@ -22,9 +22,9 @@ const view = state =>
             tag="div"
             props={{class: "ex3-container"}}
             items={state.items}
-            getKey={x => x}
-        >{(index, value, status) =>
-            <div style={{left: (index * 50) + "px"}} class={`ex3-item ex3-item-${status}`}>{value}</div>
+            classNames="ex3-item"
+        >{(value, index) =>
+            <div style={{left: (index * 50) + "px"}}>{value}</div>
         }
         </TransitionGroup>
         <div>
