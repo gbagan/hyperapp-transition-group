@@ -20,6 +20,8 @@ properties of TransitionGroup
 - **tag**: (default "div") the tag name of the container vnode
 - **props**: the properties of the container vnode
 - **items**: an array from the state that we want to display
+- **classNames**: (default undefined)
+             If it is an non empty string, add the classes depending on the status to vdom returned by *viewItem*
 - **getKey**: (default x => x)
           A function which returns a number or a string which identifies an element of the array *items*.  
           At any time, all elements of items must have a distinct key
@@ -32,7 +34,8 @@ properties of TransitionGroup
 the child of TransitionGroup is a function viewItem :: (index, item, status) => vdom which renders an element of the array *items*
 - **index**: the index of the item in the array
 - **item**: the element
-- **status**: the status is a string that can be "entering" | "entered" | "leaving"
+- **status**: the status is a string that can be "entering" | "entered" | "leaving".
+            If classNames is defined, you probably don't need this information              
 
 Example:
 
@@ -72,6 +75,29 @@ In your css, you must define classes rects-item-entering, rects-item-entered, re
 }
 ```
 
+### Other functions
+
+**makeTransition**: creates an instance of Transition
+
+Transition is a lighter version of TransitionGroup for rendering only one element 
+
+properties of TransitionGroup:
+- **data**: the data we want to render
+- **classNames**: (default undefined)
+             If it is an non empty string, add the classes depending on the status to vdom returned by *view*
+
+the child of TransitionGroup is a function viewItem :: (data), status) => vdom
+- **data**: the cached data
+- **status**: the status is a string that can be "entering" | "entered" | "leaving".
+            If classNames is defined, you probably don't need this information  
+
+**makeFadeTransition** creates an instance of FadeTransition
+
+FadeTransition is a special instance of Transition
+
+properties of TransitionGroup:
+- **data**: the data we want to render
+- **duration**: duration of the fade in/fade out
 
 Notes:
 - the vnode returned by the function *viewItem* must not be keyed. TransitionGroup does that for you
@@ -89,5 +115,4 @@ https://github.com/gbagan/hyperapp-transition-group/blob/master/examples/example
 ## Planned features
 
 - manage animations instead of transition
-- Transition component, a lighter version of TransitionGroup for rendering only one element
 

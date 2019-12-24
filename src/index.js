@@ -72,3 +72,59 @@ export const makeTransitionGroup = () => {
             }
         })
 }
+
+export const makeTransition = () => {
+    const cache = null
+    const status = null
+    const handleTransitionEnd = state => {
+        if (cache === null)
+            return state
+        if (status === "leaving") {
+            cache = null
+            return { ...state }
+        }
+        return state;
+    }
+
+    const itemProps = {
+        ontransitionend: [handleTransitionEnd, key]
+    }
+
+    const patchView = vdom => ({ ...vdom, props: { ...itemProps, ...vdom.props } })
+
+    return ({data}, view) =>
+        // dummy object to force the evaluation of the lazy view at each update
+        Lazy({data, dummy: {}, view: ({data}) => {
+            if(Array.isArray(view))
+                view = view[0].name
+            
+            if (data === null || data === undefined || data === false) {
+                status = "leaving"
+            } else if (status === "entering") {
+                status = "entered"
+            } else {
+                status = "entering"
+                cache = data
+                window.dispatchEvent(new CustomEvent("needupdate"))
+            }
+            return cache !== null && patchView(view(cache, status))
+        }})
+}
+
+export const fadeStyle = (status, duration) =>
+    status === "entering" ? {
+        opacity: 0
+    } : status === "entered" ? {
+        opacity: 1,
+        transition: `opacity ${duration}ms`
+    } : { // status === "leaving" 
+        opacity: 0,
+        transition: `opacity ${duration}ms`
+    }
+
+export const makeFadeTransition = () => {
+    const transition = makeTransition()
+    return ({data, duration}, view) => transition({data}, (cachedData, status) =>
+        view(cachedData) 
+    )
+}
