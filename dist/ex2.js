@@ -352,8 +352,8 @@
 
   const compareIndex = ([k1, v1], [k2, v2]) => v1.index - v2.index;
 
-  const addTransitionClasses = (vdom, classNames, status) => {
-    if (!vdom) return;
+  const addTransitionClasses = (classNames, status) => vdom => {
+    if (!classNames || !vdom) return vdom;
     let vdomCls = vdom.props.class;
     vdomCls = vdomCls === undefined ? {} : typeof vdomCls === "string" ? {
       [vdomCls]: true
@@ -362,11 +362,6 @@
     const newCls = { ...vdomCls,
       [trCls]: true
     };
-    console.log({ ...vdom,
-      props: { ...vdom.props,
-        class: newCls
-      }
-    });
     return { ...vdom,
       props: { ...vdom.props,
         class: newCls
@@ -452,11 +447,7 @@
           item,
           index,
           status
-        }]) => {
-          const vdom = viewItem(item, index, status);
-          const vdom2 = patchView(key)(vdom);
-          return classNames ? addTransitionClasses(vdom2, classNames, status) : vdom2;
-        }));
+        }]) => addTransitionClasses(classNames, status)(patchView(key)(viewItem(item, index, status)))));
       }
     });
   };

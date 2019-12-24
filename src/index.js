@@ -13,9 +13,9 @@ export const transitionSub = rawEvent("needupdate")(state => ({ ...state }))
 const compareKey = ([key1], [key2]) => key1 < key2 ? -1 : key1 === key2 ? 0 : 1
 const compareIndex = ([k1, v1], [k2, v2]) => v1.index - v2.index
 
-const addTransitionClasses = (vdom, classNames, status) => {
-    if (!vdom)
-        return
+const addTransitionClasses = (classNames, status) => vdom => {
+    if (!classNames || !vdom)
+        return vdom
     let vdomCls = vdom.props.class
     vdomCls = vdomCls === undefined ? {} : typeof vdomCls === "string" ? { [vdomCls]: true } : vdomCls
     const trCls = status === "entering"
@@ -25,7 +25,6 @@ const addTransitionClasses = (vdom, classNames, status) => {
             : `${classNames} ${classNames}-leaving`
 
     const newCls = { ...vdomCls, [trCls]: true }
-    console.log({ ...vdom, props: { ...vdom.props, class: newCls }})
     return { ...vdom, props: { ...vdom.props, class: newCls } }
 }
 
@@ -84,11 +83,9 @@ export const makeTransitionGroup = () => {
                 const entries = Object.entries(obj)
                 entries.sort(sortBy === "index" ? compareIndex : compareKey)
 
-                return h(tag, props, entries.map(([key, { item, index, status }]) => {
-                    const vdom = viewItem(item, index, status);
-                    const vdom2 = patchView(key)(vdom);
-                    return classNames ? addTransitionClasses(vdom2, classNames, status) : vdom2;
-                }))
+                return h(tag, props, entries.map(([key, { item, index, status }]) => 
+                    addTransitionClasses(classNames, status)(patchView(key)(viewItem(item, index, status)))
+                ))
             }
         })
 }
@@ -118,7 +115,6 @@ export const makeTransition = () => {
             data, dummy: {}, view: ({ data }) => {
                 if (Array.isArray(view))
                     view = view[0].name
-
                 if (data === null || data === undefined || data === false) {
                     status = "leaving"
                 } else if (status === "entering") {
@@ -128,7 +124,7 @@ export const makeTransition = () => {
                     cache = data
                     window.dispatchEvent(new CustomEvent("needupdate"))
                 }
-                return cache !== null && patchView(view(cache, status))
+                return cache !== null && addTransitionClasses(classNames, status)(patchView(view(cache, status)))
             }
         })
 }
@@ -144,9 +140,16 @@ export const fadeStyle = (status, duration) =>
                 transition: `opacity ${duration}ms`
             }
 
+const patchFade = (status, duration) => vdom => {
+    if (!vdom)
+        return vdom
+    const newStyle = {...vdom.props.style, ...fadeStyle(status, duration)}
+    return {...vdom, props: {...props, style: newStyle}}
+}
+
 export const makeFadeTransition = () => {
     const transition = makeTransition()
     return ({ data, duration }, view) => transition({ data }, (cachedData, status) =>
-        view(cachedData)
-    )
+        patchFade (status, duration) (view(cachedData))
+    ) 
 }
