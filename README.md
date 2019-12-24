@@ -120,5 +120,6 @@ https://github.com/gbagan/hyperapp-transition-group/blob/master/examples/example
 
 ## Planned features
 
-- manage animations instead of transition
+- CSS animations: currently, the user can only use CSS transitions
+- use same class names as in Vue and React
 
