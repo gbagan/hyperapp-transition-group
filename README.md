@@ -113,8 +113,8 @@ Notes:
 
 
 See a full example here
-https://github.com/gbagan/hyperapp-transition-group/blob/master/examples/example2.js
-[CSS](https://github.com/gbagan/hyperapp-transition-group/blob/master/dist/style2.css)
+[Javascript](https://github.com/gbagan/hyperapp-transition-group/blob/master/examples/example2.js) | 
+[CSS](https://github.com/gbagan/hyperapp-transition-group/blob/master/dist/style2.css) | 
 [Demo](https://gbagan.github.io/hyperapp-transition-group/ex2.html)
 
 
